@@ -8,8 +8,8 @@ var pkg = require('./package.json');
 
 // further setup
 
-DEBUG = true;
-BASE_PATH = DEBUG ? "http://dev.localhost:5000/v1/" : "http://api.it-se.me/v1/"
+DEBUG = false;
+BASE_PATH = DEBUG ? "http://dev.localhost:5000/v1/" : "http://api.it-se.me/v1/";
 
 
 require('messenger/build/js/messenger-theme-flat');
