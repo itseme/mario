@@ -7,10 +7,13 @@ var messenger = require('messenger/build/js/messenger');
 var pkg = require('./package.json');
 
 // further setup
-
 DEBUG = false;
-BASE_PATH = DEBUG ? "http://dev.localhost:5000/v1/" : "http://api.it-se.me/v1/";
+BASE_PATH = "http://api.it-se.me/v1/";
 
+if (document.location.host.indexOf("localhost") > -1){
+ DEBUG = true;
+ BASE_PATH = "http://dev.localhost:5000/v1/";
+}
 
 require('messenger/build/js/messenger-theme-flat');
 

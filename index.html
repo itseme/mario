@@ -26,8 +26,16 @@
         <a>What is this?</a> | <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a> 2014 Benjamin Kampmann
       </p>
     </footer>
-    <script src="browser-bundle.js"></script>
     <script type="text/javascript">
+    (function() {
+        var wf = document.createElement('script');
+        wf.src = document.location.host.indexOf("localhost") > -1 ? 'browser-bundle.js' : 'browser-bundle.min.js';
+        wf.type = 'text/javascript';
+        wf.async = 'true';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(wf, s);
+      })();
+
       WebFontConfig = {
         google: { families: [ 'Alegreya+Sans:400,300,100:latin' ] }
       };
