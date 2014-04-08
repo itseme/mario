@@ -265,7 +265,6 @@ var MainContent = React.createClass({
     window.localStorage["itseme"] = JSON.stringify(this.state);
   },
   componentWillMount: function(){
-    console.log("soon!");
     if (window['localStorage'] !== null){
       // local storage support. let's load stuff
       try {
@@ -291,7 +290,6 @@ var MainContent = React.createClass({
     this.saveInStorage();
   },
   newEntry: function(accountData){
-    console.log(accountData);
     var accounts = this.state.accounts;
     accounts.push(accountData);
     this.setState({"accounts": accounts});
