@@ -148,7 +148,7 @@ var ListItem = React.createClass({
             showCloseButton: true
           });
         this.setState({"confirmed": false, "loading": false});
-      });
+      }.bind(this));
   },
   componentDidMount: function(){
     if (this.props.account.confirmed){
