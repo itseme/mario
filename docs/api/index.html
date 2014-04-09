@@ -1,0 +1,450 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Documentation &mdash; It-se.me 0.9-rc2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9-rc2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="It-se.me 0.9-rc2 documentation" href="../" />
+    <link rel="next" title="XMPP Extensions" href="../xmpp-ext/" />
+    <link rel="prev" title="The Concept" href="../concept/" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex/" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../xmpp-ext/" title="XMPP Extensions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../concept/" title="The Concept"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../">It-se.me 0.9-rc2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-documentation">
+<h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="basics">
+<h2>Basics<a class="headerlink" href="#basics" title="Permalink to this headline">¶</a></h2>
+<p>The API-Service can be queried and managed using HTTP-Calls
+to <cite>api.it-se.me</cite> and it will answer with JSON-Formatted output.</p>
+<p>This is just the basic API documentation. To understand the underlying
+conceptional idea, please see :ref:concepts and :ref:faq.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Though we consider the v1-API kind of stable and want to only
+add new features, it is still in a Beta-Testing phase and might
+be subject to change if problematic security concerns are raised.
+Please keep this a default-off extended feature in your
+(production) App until further notice.</p>
+</div>
+<div class="section" id="limitations">
+<h3>Limitations<a class="headerlink" href="#limitations" title="Permalink to this headline">¶</a></h3>
+<p>In order to allow wide, anonymous access to the API and foster
+a wide addoption there is no App authentication necessary to use
+the service. However, there is a rate limitatin of 10 request
+we allow per second per IP. There might also be specific limitations
+per call.</p>
+</div>
+<div class="section" id="error-codes-and-messages">
+<h3>Error Codes and Messages<a class="headerlink" href="#error-codes-and-messages" title="Permalink to this headline">¶</a></h3>
+<p>For general Error reporting, we are using HTTP-Error-Codes. Further
+those provide some insight of what went wrong as json like in this
+example:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+    <span class="nt">&quot;error&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="nt">&quot;code&quot;</span><span class="p">:</span> <span class="s2">&quot;target_unconfirmed&quot;</span><span class="p">,</span>
+      <span class="nt">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Please confirm &#39;X&#39; first.&quot;</span>
+     <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="register">
+<h2>Register<a class="headerlink" href="#register" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/v1/register/&lt;provider&gt;/&lt;provider_id&gt;/&lt;target&gt;</dd>
+<dt>Supported Methods:</dt>
+<dd>GET</dd>
+<dt>Optional Parameters:</dt>
+<dd>resend=1</dd>
+</dl>
+<p>With this method you can register a new entry to the service. You have
+to specify the provider (medium) and the id on that one as well as the
+target xmpp-id it should be bound to.</p>
+<p>If you call it more often for the same <cite>target</cite> it will only send the
+confirmation code once. If, and only if, the User asks for it to resend
+please attach the &#8221;?resend=1&#8221; parameter to the call, which will
+generate and send a new code.</p>
+<p>If everything goes according to plan, you&#8217;ll receive a json response
+as follows:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+ <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;pending&quot;</span><span class="p">,</span>
+ <span class="nt">&quot;hash&quot;</span><span class="p">:</span> <span class="s2">&quot;397ee3ee893ba686b8f228078803ce34911b35c8bf15a7986310de1225589fe13706a3242376da92c144a0e38e4693ac237840879947dc984870715c08793909&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The response might contain a <cite>goto</cite>-field containing a URL. If
+present the APP <em>must</em> redirect the user to this URL to continue
+authentication. Otherwise the confirmation code will be handled
+in a different way (see providers).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before you can bound any medium to a jabber-id, you first need
+to confirm said ID by requesting the <cite>provider</cite> &#8216;xmpp&#8217; with the
+given jabber-id as <cite>provider_id</cite> and <cite>target</cite>. For
+<cite>xmpp&#64;example.com</cite> this would for example be
+<cite>/v1/register/xmpp/xmpp&#64;example.com/xmpp&#64;example.com</cite> and you
+won&#8217;t be able to bind anything to this target until it has been
+verified.</p>
+</div>
+<div class="section" id="providers">
+<h3>Providers<a class="headerlink" href="#providers" title="Permalink to this headline">¶</a></h3>
+<p>Currently the following providers are support and acts as follows:</p>
+<dl class="docutils">
+<dt>xmpp:</dt>
+<dd>The xmpp provider expects a jabber id as the <cite>provider_id</cite>. It
+will then connect to that account and send a four digit number
+to be used to verify against the server. This provider shall
+also be used to initially register a jabber id by providing the
+same id for <cite>provider_id</cite> and <cite>target</cite>. The app should either
+wait for that request or prompt the user to wait for that code.</dd>
+<dt>email:</dt>
+<dd>Expects an email-address as <cite>provider_id</cite> and will then send a
+six digit verification code plus URL to the given Email-Address
+for confirmation. The App should inform the user about this and
+ask them to confirm manually.</dd>
+<dt>phone:</dt>
+<dd>Expects the <cite>provider_id</cite> to be an international phone number
+including <cite>+XXX</cite> number codes. An example call would be:
+<cite>/v1/register/phone/+1234456789/xmpp&#64;example.com</cite> . This provider
+will send a SMS with a four digit code to the given number.</dd>
+<dt>facebook:</dt>
+<dd>The facebook provider expects your username as the <cite>provider_id</cite>.
+As it uses OAuth, the return will contain a <cite>goto</cite>-url the
+App should redirect the User to in order to sign in and grant
+the permissions</dd>
+<dt>twitter:</dt>
+<dd>Similar to facebook the <cite>provider_id</cite> is expected to be the twitter
+username and it will also return a <cite>goto</cite>-url to redirect the User,
+too.</dd>
+<dt>github:</dt>
+<dd>Same as for twitter and facebook, the expected <cite>provider_id</cite> is
+the username and there will be a <cite>goto</cite>-url returned to opened by
+the App for the User to authenticate against.</dd>
+</dl>
+</div>
+<div class="section" id="errors">
+<h3>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>401 - target_unconfirmed:</dt>
+<dd>If the given <cite>target</cite> hasn&#8217;t been successfully confirmed yet. You
+might want to resend the register-code for your jabber-id</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="verify">
+<h2>Verify<a class="headerlink" href="#verify" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/v1/verify/&lt;hashkey&gt;</dd>
+<dt>Supported Methods:</dt>
+<dd>GET</dd>
+<dt>Optional Parameters:</dt>
+<dd>code=XXXX</dd>
+</dl>
+<p>In order to verify a previously registered entry of <cite>hashkey</cite>.
+Commonly called with a <cite>code</cite> parameter containing the code
+send through the providing channel. Also used as the callback
+endpoint for some OAuth2-based providers like <cite>Github</cite> or <cite>Facebook</cite>.</p>
+<p>If the given code matches the code in the system, a successful return
+confirms the authentication happened and deleted the reference to
+the previously provided <cite>provider_id</cite>. The returning JSON would like
+like this:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+ <span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>But can also contain some further information given by the provider.</p>
+<div class="section" id="id1">
+<h3>Errors<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>404 - not_found:</dt>
+<dd>There has no pending entry been found for the hashkey. In case you
+have recently registered the account and reused the hashkey, this
+most commonly means the account has been verified meanwhile. You
+might want to use <cite>confirm</cite> to confirm this though.</dd>
+<dt>400 - missing_code:</dt>
+<dd>The provider requires you to provide a <cite>code</cite> parameter but none
+has been given. Please prompt the User to enter the code and try
+again.</dd>
+<dt>400 - faulty_code:</dt>
+<dd>The code provided doesn&#8217;t match the one last send through the
+channel. Most commonly because another resend-registration-request
+has been triggered meanwhile and superseeded the used code. Please
+prompt the User that the code was wrong and that they might wait
+for another to arrive to retry or check for typing mistakes.</dd>
+<dt>401 - OAuthException:</dt>
+<dd>A problem occured in the OAuth interna of the <cite>twitter</cite>, <cite>facebook</cite>
+or <cite>github</cite> providers. Please look at the provided <cite>message</cite> for
+further information. Most likely happens because of faulty
+redirection, failure in authentication with the service or missing
+parameters during development.</dd>
+<dt>400 - wrong_user:</dt>
+<dd>In case of OAuth, the provided <cite>provider_id</cite> doesn&#8217;t match with the
+one presented by the OAuth provider after authentication. Please
+prompt this to the User and explain them the requested account
+data didn&#8217;t match their input. They might simply picked the wrong
+account when logging in.</dd>
+<dt>500 - internal server error:</dt>
+<dd>Please provider a bug report something went terribly wrong on the
+server side.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="contact">
+<h2>Contact<a class="headerlink" href="#contact" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/v1/contact/</dd>
+<dt>Supported Methods:</dt>
+<dd>POST</dd>
+</dl>
+<p>Post data (JSON-formatted String):</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="s2">&quot;xmpp@example.com&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;contact_info&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;phone&quot;</span><span class="p">,</span> <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;+00112345678&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;hunter@jobs.com&quot;</span><span class="p">},</span>
+      <span class="p">{</span><span class="nt">&quot;protocol&quot;</span><span class="p">:</span> <span class="s2">&quot;phone&quot;</span><span class="p">,</span> <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;+4912345&quot;</span><span class="p">}</span>
+      <span class="p">],</span>
+  <span class="nt">&quot;contacts&quot;</span><span class="p">:</span> <span class="p">[</span>
+      <span class="s2">&quot;397ee3ee893ba686b8f228078803ce34911b35c8bf15a7986310de1225589fe13706a3242376da92c144a0e38e4693ac237840879947dc984870715c08793909&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;e5d20f91694fde312aeb9e784178c8bd8a386d8c2789dfed7dc14a35fb8ea88fd0a1583a0a98b80058e8c9e6d7c8acd2f8c7ab240709600854f7e0bdabbc7078&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;abce880ed2d448abffa8efa8939d8e15625ad16ff2330d97388f32fee480d799b9753e1d2f362c7deb1f7ea83bfbbf234712f9b45979496589812d0016e2cb48&quot;</span>
+      <span class="p">]</span>
+  <span class="p">}</span>
+</pre></div>
+</div>
+<p>A post request asking the service to send a contact request to all
+provided hashes in <cite>contacts</cite>. A core feature of the service: takes
+all provided contact_info, makes them into hashes and matches them
+against their database entry. Only those matching the given target
+will be forwarded to the clients.</p>
+<p>Secondly, looks up the targets of the specified clients and sends
+every one found the <cite>target</cite> as well as the list of confirmed contact
+infos for matching against their own address book. See
+<em class="xref std std-ref">contact-matching</em>. The send will be done via XMPP using the
+itseme-extension in messages, see <em class="xref std std-ref">itseme-contact-extension</em>.</p>
+<p>If everything goes well and independant of the number of matches found
+(even if none), the returning response will be:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;requests_send&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id2">
+<h3>Errors<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt>400 - json_decode_error:</dt>
+<dd>The provided JSON couldn&#8217;t be read. Please make sure you&#8217;ve encoded
+it properly.</dd>
+<dt>401 - target_unconfirmed:</dt>
+<dd>If the given <cite>target</cite> hasn&#8217;t been successfully confirmed yet. You
+might want to resend the register-code for the jabber-id.</dd>
+<dt>400 - key_error:</dt>
+<dd>You forgot to provide at least one of the mandatory keys. Please consult &#8216;message&#8217; to learn which one.</dd>
+<dt>400 - value_error:</dt>
+<dd>At least one of the provided parameters didn&#8217;t match the required
+criteria. Please consult &#8216;message&#8217; for further information.</dd>
+<dt>400 - insufficient_contact_info:</dt>
+<dd>None of the provided contact info could be confirmed against the
+service, no requests will be send. At least one contact details
+needs to be provided and needs to be confirmed on the platform
+otherwise we won&#8217;t forward the request. If you see this error,
+you might want to ask the user again to authenticate against
+at least one service.</dd>
+<dt>413 - too_many_requested:</dt>
+<dd>Per request only not more than 100 hashes shall be provided. Please
+check before sending and batch the requests accordingly, preferably
+after the previous succeded to not run into the rate limit.</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="confirm">
+<h2>Confirm<a class="headerlink" href="#confirm" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/v1/confirm/&lt;hashkey&gt;/&lt;target&gt;</dd>
+<dt>Supported Methods:</dt>
+<dd>GET</dd>
+</dl>
+<p>Confirm that the given <cite>hashkey</cite> links to the provided <cite>target</cite>.
+Returns a json if and only if the hashkey was found and the stored
+target matches the provided one:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>In any other case (also if the key wasn&#8217;t found or isn&#8217;t verified yet)
+it will return a false value for the check:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id3">
+<h3>Errors<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>There are no custom errors.</p>
+</div>
+</div>
+<div class="section" id="confirm-many">
+<h2>Confirm many<a class="headerlink" href="#confirm-many" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/v1/confirm</dd>
+<dt>Supported Methods:</dt>
+<dd>POST</dd>
+</dl>
+<p>Post Data:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;hashes&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;397ee3ee893ba686b8f228078803ce34911b35c8bf15a7986310de1225589fe13706a3242376da92c144a0e38e4693ac237840879947dc984870715c08793909&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;e5d20f91694fde312aeb9e784178c8bd8a386d8c2789dfed7dc14a35fb8ea88fd0a1583a0a98b80058e8c9e6d7c8acd2f8c7ab240709600854f7e0bdabbc7078&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;target&quot;</span><span class="p">:</span> <span class="s2">&quot;jid@example.com&quot;</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+<p>Confirm that the given <cite>hashes</cite> all link to the provided <cite>target</cite>.
+Returns a json if so:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>If at least one hashkey wasn&#8217;t found, isn&#8217;t confirmed yet or doesn&#8217;t
+match the provided target, it will return a falsy value instead:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">false</span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="id4">
+<h3>Errors<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>There are no custom errors.</p>
+</div>
+</div>
+<div class="section" id="version">
+<h2>Version<a class="headerlink" href="#version" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>URL:</dt>
+<dd>/version</dd>
+<dt>Supported Methods:</dt>
+<dd>GET</dd>
+</dl>
+<p>Returns a json-response confirming the server version. Mainly for
+debugging purposes:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span><span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;0.9-rc2&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../">
+              <img class="logo" src="../_static/mustache.svg" alt="Logo"/>
+            </a></p><h3>About It-se.me</h3>
+<p>
+  <a href="http://www.it-se.me/">It-se.me</a> is a secure, privacy-focussed contact interchange service. Heck, it is so concerned about privacy, it itself doesn't know your contact details.
+</p>
+<h3>Other Formats</h3>
+<p>
+  You can download the documentation in other formats as well:
+</p>
+<ul>
+  <li><a href="itseme-docs.pdf">as PDF</a>
+  <li><a href="itseme-docs.zip">as zipped HTML</a>
+</ul>
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://www.it-se.me/">Mario, an It-se.me frontend</a></li>
+  <li><a href="http://github.com/itseme/">It-se.me @ github</a></li>
+  <li><a href="http://github.com/itseme/api-server/issues">Issue Tracker</a></li>
+</ul>
+  <h3><a href="../">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API Documentation</a><ul>
+<li><a class="reference internal" href="#basics">Basics</a><ul>
+<li><a class="reference internal" href="#limitations">Limitations</a></li>
+<li><a class="reference internal" href="#error-codes-and-messages">Error Codes and Messages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#register">Register</a><ul>
+<li><a class="reference internal" href="#providers">Providers</a></li>
+<li><a class="reference internal" href="#errors">Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#verify">Verify</a><ul>
+<li><a class="reference internal" href="#id1">Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#contact">Contact</a><ul>
+<li><a class="reference internal" href="#id2">Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#confirm">Confirm</a><ul>
+<li><a class="reference internal" href="#id3">Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#confirm-many">Confirm many</a><ul>
+<li><a class="reference internal" href="#id4">Errors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#version">Version</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Benjamin Kampmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Technologies &mdash; It-se.me 0.9-rc2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9-rc2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="It-se.me 0.9-rc2 documentation" href="../" />
+    <link rel="next" title="Common questions" href="../faq/" />
+    <link rel="prev" title="XMPP Extensions" href="../xmpp-ext/" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex/" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../faq/" title="Common questions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../xmpp-ext/" title="XMPP Extensions"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../">It-se.me 0.9-rc2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-technologies">
+<h1>The Technologies<a class="headerlink" href="#the-technologies" title="Permalink to this headline">¶</a></h1>
+<p>This project, as soo many of our time, stands of the shoulders of
+giants. In particular, it is too mention that the server itself
+is build and run in <a class="reference external" href="https://www.python.org/">Python</a> using the amazing <a class="reference external" href="http://flask.pocoo.org/">Flask-Web-Framework</a>.</p>
+<p>For background queueing and processing, it uses <a class="reference external" href="http://www.celeryproject.org/">Celery</a>, which itself
+relies on <a class="reference external" href="http://redis.io/">Redis</a> for queueing and reporting. The Data itself is
+stored in the Document-NoSQL-Database <a class="reference external" href="http://couchdb.apache.org/">Couchdb</a>. And deployment
+is done using <a class="reference external" href="https://www.docker.io/">Docker</a>.</p>
+<p>Frontend-Side (for <a class="reference external" href="https://github.com/itseme/mario">Mario</a>, the little helper), the project relies
+on <a class="reference external" href="http://facebook.github.io/react/index.html">React</a> and <a class="reference external" href="http://jquery.com/">jQuery</a>.</p>
+<p>Thanks to all these amazing projects</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../">
+              <img class="logo" src="../_static/mustache.svg" alt="Logo"/>
+            </a></p><h3>About It-se.me</h3>
+<p>
+  <a href="http://www.it-se.me/">It-se.me</a> is a secure, privacy-focussed contact interchange service. Heck, it is so concerned about privacy, it itself doesn't know your contact details.
+</p>
+<h3>Other Formats</h3>
+<p>
+  You can download the documentation in other formats as well:
+</p>
+<ul>
+  <li><a href="itseme-docs.pdf">as PDF</a>
+  <li><a href="itseme-docs.zip">as zipped HTML</a>
+</ul>
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://www.it-se.me/">Mario, an It-se.me frontend</a></li>
+  <li><a href="http://github.com/itseme/">It-se.me @ github</a></li>
+  <li><a href="http://github.com/itseme/api-server/issues">Issue Tracker</a></li>
+</ul>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Benjamin Kampmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

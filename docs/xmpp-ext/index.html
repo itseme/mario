@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>XMPP Extensions &mdash; It-se.me 0.9-rc2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9-rc2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="It-se.me 0.9-rc2 documentation" href="../" />
+    <link rel="next" title="The Technologies" href="../technologies/" />
+    <link rel="prev" title="API Documentation" href="../api/" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex/" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../technologies/" title="The Technologies"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../api/" title="API Documentation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../">It-se.me 0.9-rc2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="xmpp-extensions">
+<h1>XMPP Extensions<a class="headerlink" href="#xmpp-extensions" title="Permalink to this headline">¶</a></h1>
+<p>In order to allow an automatic, user-less flow for verification and
+confirmation of apps, the It-se.me XMPP client sends slightly modified
+versions of messages, containing extra information for seamless
+integration. The extensions are done to the normal message-stanza and
+are wrapped into the <cite>it-se.me</cite>-namespace and are of either <cite>verify</cite>
+or <cite>contact</cite></p>
+<div class="section" id="sending-codes">
+<h2>Sending codes<a class="headerlink" href="#sending-codes" title="Permalink to this headline">¶</a></h2>
+<p>When the it-se.me service sends the verification code to the provided
+jabber id, it does this through the message (for display) but also
+attaches the verify-tag (in the <cite>it-se.me</cite>-namespace). This tag contains
+to tags: <cite>code</cite> and <cite>hash</cite>. The <cite>hash</cite> contains the generated SHA512-Sum
+while <cite>code</cite> contains the provided code:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;message</span> <span class="na">from=</span><span class="s">&#39;itseme@jabber.ccc.de/XXXXX&#39;</span> <span class="na">to=</span><span class="s">&#39;xmmp@example.com&#39;</span> <span class="na">type=</span><span class="s">&#39;chat&#39;</span> <span class="na">xml:lang=</span><span class="s">&#39;en&#39;</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;body&gt;</span>It-se, you xmmp@example.com? Verify with: 3991<span class="nt">&lt;/body&gt;</span>
+ <span class="nt">&lt;verify</span> <span class="na">xmlns=</span><span class="s">&#39;it-se.me:verify&#39;</span><span class="nt">&gt;</span>
+     <span class="nt">&lt;code&gt;</span>3991<span class="nt">&lt;/code&gt;</span>
+     <span class="nt">&lt;hash&gt;</span>fb1a59cd5e804c48d89f4267956518ac47b7d0e645fd92fcee85cbd9dbebb3eef4ad12a2d5baaa216ade5c698XXXXXXX8c0a5208f22b8aa9989dec91401<span class="nt">&lt;/hash&gt;</span>
+ <span class="nt">&lt;/verify&gt;</span>
+<span class="nt">&lt;/message&gt;</span>
+</pre></div>
+</div>
+<p>When the app receives such a message and has a registration with
+the given hash pending, it may automatically call the verify-url
+providing the under <cite>code</cite>-lying content as a parameter to automatically
+authenticate the service. In which case it is also recommended, to
+prevent the message from being shown to the user.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Though you there is a jabber account provided here, this might be
+subject to change and the implementation should not rely on it coming
+from this account.</p>
+</div>
+</div>
+<div class="section" id="contacts-request">
+<h2>Contacts Request<a class="headerlink" href="#contacts-request" title="Permalink to this headline">¶</a></h2>
+<p>When an authenticated user sends a <cite>contact</cite>-request to the API and the
+service finds matching hashes, it then forwards the _confirmed_ contact
+details alongside the provided jabber-id to the jabber account stored
+for that hash via an xmpp message, too. Those messages contain a
+<cite>contact</cite>-tag of the <cite>it-se.me</cite>-namespace, similar to this:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;message</span> <span class="na">from=</span><span class="s">&#39;itseme@jabber.ccc.de/XXXXX&#39;</span> <span class="na">to=</span><span class="s">&#39;xmmp@example.com&#39;</span> <span class="na">type=</span><span class="s">&#39;chat&#39;</span> <span class="na">xml:lang=</span><span class="s">&#39;en&#39;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;body&gt;</span>Hey there,
+     xmpp2@example.com asked whether they are allowed to get in
+     contact with you. They provided the following contact
+     details for you to confirm their identity:
+       * phone: +123456789
+       * email: xmpp2@example.com
+   <span class="nt">&lt;/body&gt;</span>
+   <span class="nt">&lt;contact</span> <span class="na">xmlns=</span><span class="s">&#39;it-se.me:contact&#39;</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;info&gt;</span>[{&quot;provider&quot;: &quot;phone&quot;, &quot;id&quot;: &quot;+123456789&quot;,
+         &quot;confirmed&quot;: true}, {&quot;provider&quot;: &quot;email&quot;, &quot;id&quot;:
+         &quot;xmpp2@example.com&quot;, &quot;confirmed&quot;: true}]<span class="nt">&lt;/info&gt;</span>
+         <span class="nt">&lt;jid&gt;</span>random@example.com<span class="nt">&lt;/jid&gt;</span>
+   <span class="nt">&lt;/contact&gt;</span>
+ <span class="nt">&lt;/message&gt;</span>
+</pre></div>
+</div>
+<p>In which the <cite>info</cite>-tag contains an encoded JSON-Array with a list of
+hashes in the form of:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>
+  <span class="nt">&quot;provider&quot;</span><span class="p">:</span> <span class="s2">&quot;email&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;xmpp2@example.com&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;confirmed&quot;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And the provided-<cite>jid</cite>-tag contains the corresponding target account
+requesting the contact. As discussed in :ref:concept, the App may
+use these provided information to look up the account in the Users
+address book and (if it chooses to) add the account to their roster.
+It is generally recommended to also subscribe to their presence and
+immediatly send them a similar request containing the <cite>contact</cite>-tag
+with your own verified contact details because up to this point the
+other party has no information about ones account information.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the App receives a <cite>contact</cite> request from any other account
+than the specified one, it should always check back the provided
+contact information with the it-se.me service using the confirm-many
+API call. As this fails if at least one isn&#8217;t confirmed the App
+may not send any contact information on its own that hasn&#8217;t been
+verfified before hand.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../">
+              <img class="logo" src="../_static/mustache.svg" alt="Logo"/>
+            </a></p><h3>About It-se.me</h3>
+<p>
+  <a href="http://www.it-se.me/">It-se.me</a> is a secure, privacy-focussed contact interchange service. Heck, it is so concerned about privacy, it itself doesn't know your contact details.
+</p>
+<h3>Other Formats</h3>
+<p>
+  You can download the documentation in other formats as well:
+</p>
+<ul>
+  <li><a href="itseme-docs.pdf">as PDF</a>
+  <li><a href="itseme-docs.zip">as zipped HTML</a>
+</ul>
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://www.it-se.me/">Mario, an It-se.me frontend</a></li>
+  <li><a href="http://github.com/itseme/">It-se.me @ github</a></li>
+  <li><a href="http://github.com/itseme/api-server/issues">Issue Tracker</a></li>
+</ul>
+  <h3><a href="../">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">XMPP Extensions</a><ul>
+<li><a class="reference internal" href="#sending-codes">Sending codes</a></li>
+<li><a class="reference internal" href="#contacts-request">Contacts Request</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Benjamin Kampmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>

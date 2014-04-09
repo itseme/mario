@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Common questions &mdash; It-se.me 0.9-rc2 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9-rc2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="It-se.me 0.9-rc2 documentation" href="../" />
+    <link rel="prev" title="The Technologies" href="../technologies/" />
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex/" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../technologies/" title="The Technologies"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../">It-se.me 0.9-rc2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="common-questions">
+<h1>Common questions<a class="headerlink" href="#common-questions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="tech-questions">
+<h2>Tech questions<a class="headerlink" href="#tech-questions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-aren-t-you-using-salts-salts-make-everything-more-secure">
+<h3>Why aren&#8217;t you using salts? Salts make everything more secure!<a class="headerlink" href="#why-aren-t-you-using-salts-salts-make-everything-more-secure" title="Permalink to this headline">¶</a></h3>
+<p>Though this might be technically right, in our current use case
+we are using the hash for lookup and confirmation. If we used a
+salt to generate them then people wouldn&#8217;t be able to generate
+them anylonger on their own unless you&#8217;d make them either server-
+wide or generally distribute them, in any case rendering it kinda
+useless.</p>
+<p>It would be as if you&#8217;d put a salt into a hash of a file. Either
+you redistribute it, too, or now one will be able to confirm it.</p>
+</div>
+<div class="section" id="if-you-aren-t-storing-my-data-how-is-mario-the-frontend-able-to-show-it">
+<h3>If you aren&#8217;t storing my data, how is Mario (the frontend) able to show it?<a class="headerlink" href="#if-you-aren-t-storing-my-data-how-is-mario-the-frontend-able-to-show-it" title="Permalink to this headline">¶</a></h3>
+<p><a href="#id1"><span class="problematic" id="id2">Mario_</span></a> indeed knows about this information but the It-se.me
+API-Server doesn&#8217;t. Mario stores it on your System via LocalStorage
+for convienience.</p>
+</div>
+</div>
+<div class="section" id="api-questions">
+<h2>API questions<a class="headerlink" href="#api-questions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="is-there-a-reference-implementation">
+<h3>Is there a reference implementation?<a class="headerlink" href="#is-there-a-reference-implementation" title="Permalink to this headline">¶</a></h3>
+<p>Yes. The <a href="#id3"><span class="problematic" id="id4">`frontend`_</span></a> itself uses the same API (and nothing else). Please
+look at the <a href="#id5"><span class="problematic" id="id6">`Mario Source code`_</span></a> for a complete registration flow
+implementation. A second also contact-flow-complete version is in the
+works for <a href="#id7"><span class="problematic" id="id8">SecureChat_</span></a>.</p>
+</div>
+<div class="section" id="i-found-a-bug-in-the-api-where-can-i-report-it">
+<h3>I found a bug in the API, where can I report it?<a class="headerlink" href="#i-found-a-bug-in-the-api-where-can-i-report-it" title="Permalink to this headline">¶</a></h3>
+<p>Please do report them on our <a class="reference external" href="yoloyolo">Github Issue Tracker</a>.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../">
+              <img class="logo" src="../_static/mustache.svg" alt="Logo"/>
+            </a></p><h3>About It-se.me</h3>
+<p>
+  <a href="http://www.it-se.me/">It-se.me</a> is a secure, privacy-focussed contact interchange service. Heck, it is so concerned about privacy, it itself doesn't know your contact details.
+</p>
+<h3>Other Formats</h3>
+<p>
+  You can download the documentation in other formats as well:
+</p>
+<ul>
+  <li><a href="itseme-docs.pdf">as PDF</a>
+  <li><a href="itseme-docs.zip">as zipped HTML</a>
+</ul>
+<h3>Useful Links</h3>
+<ul>
+  <li><a href="http://www.it-se.me/">Mario, an It-se.me frontend</a></li>
+  <li><a href="http://github.com/itseme/">It-se.me @ github</a></li>
+  <li><a href="http://github.com/itseme/api-server/issues">Issue Tracker</a></li>
+</ul>
+  <h3><a href="../">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Common questions</a><ul>
+<li><a class="reference internal" href="#tech-questions">Tech questions</a><ul>
+<li><a class="reference internal" href="#why-aren-t-you-using-salts-salts-make-everything-more-secure">Why aren&#8217;t you using salts? Salts make everything more secure!</a></li>
+<li><a class="reference internal" href="#if-you-aren-t-storing-my-data-how-is-mario-the-frontend-able-to-show-it">If you aren&#8217;t storing my data, how is Mario (the frontend) able to show it?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-questions">API questions</a><ul>
+<li><a class="reference internal" href="#is-there-a-reference-implementation">Is there a reference implementation?</a></li>
+<li><a class="reference internal" href="#i-found-a-bug-in-the-api-where-can-i-report-it">I found a bug in the API, where can I report it?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2014, Benjamin Kampmann.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+    </div>
+  </body>
+</html>
