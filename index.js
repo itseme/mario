@@ -160,22 +160,50 @@ var ListItem = React.createClass({
     }.bind(this));
   },
   render: function(){
-    var embed = [<span>Loading...</span>];
+    var status = <span className="status" title="loading" ><i className="fa fa-fw fa-spinner fa-spin"></i></span>;
+    var actions = '';
     if (!this.state.loading) {
       if (this.state.confirmed){
-        embed = [<span className="confirmed">✔</span>]
+        status = <span className="status" title="confirmed"><i className="fa fa-fw fa-check-square-o"></i></span>;
       } else {
-        embed = [<span className="confirmed">pending</span>,
-                 <a onClick={this.checkAgain}
-                      className="reconfirm">↺</a>,
-                 <button onClick={this.verify}
-                      className="reconfirm">Verify now</button>];
+        status = <span className="status" title="pending"><i className="fa fa-fw fa-circle-o"></i></span>;
+        actions = [<span className="actions"> 
+                     <button onClick={this.verify} title="verify now"
+                        className="verifybutton">verify</button>&nbsp;|&nbsp;
+                     <button onClick={this.checkAgain} title="check again"
+                          className="reconfirm">refresh</button>
+                  </span>];
       }
     }
-    return (<div>
-        <span className="protocol">{this.props.account.provider}</span>
+
+    var protocol_icon = <i className="fa fa-fw fa-dot-circle-o"></i>;
+    switch(this.props.account.provider){
+      case "xmpp":
+        protocol_icon = <i className="fa fa-fw fa-comment"></i>;
+      break;
+      case "facebook":
+        protocol_icon = <i className="fa fa-fw fa-facebook-square"></i>;
+      break;
+      case "twitter":
+        protocol_icon = <i className="fa fa-fw fa-twitter-square"></i>;
+      break;
+      case "github":
+        protocol_icon = <i className="fa fa-fw fa-github-square"></i>;
+      break;
+      case "phone":
+        protocol_icon = <i className="fa fa-fw fa-phone-square"></i>;
+      break;
+      case "email":
+        protocol_icon = <i className="fa fa-fw fa-envelope"></i>;
+      break;
+    }
+
+    return (<div className={this.state.confirmed? 'account-wrap confirmed' : 'account-wrap '}>
+        <span className={"provider " + this.props.account.provider} title={this.props.account.provider}>
+        {protocol_icon}</span>
+        {status}
         <span className="account">{this.props.account.id}</span>
-        {embed}
+        {actions}
       </div>) // <span onClick={this.removeMe} className="remove">⨯</span>
   }
 })
@@ -209,9 +237,11 @@ var NewEntry = React.createClass({
     return {"selected": "email", "value": ""};
   },
   onSubmit: function(){
+    var val = this.state["value"].trim();
+    if (!val) return;
     this.props.onSubmit({
         "provider": this.state["selected"],
-        "id": this.state["value"]});
+        "id": val});
     this.setState({"value": ""});
     return false;
   },
@@ -237,7 +267,7 @@ var NewEntry = React.createClass({
       placeholder = "github handle";
     }
     return (<form onSubmit={this.onSubmit}>
-        <label for="selectProvider">Provider</label>
+        <label for="selectProvider">Link to: </label>
         <select id="selectProvider" value={this.state.selected}
             onChange={this.onChange}>
             <option value="phone">Mobile Phone</option>
@@ -250,6 +280,7 @@ var NewEntry = React.createClass({
         </select>
         <input type={input_type} placeholder={placeholder}
             valueLink={this.linkState("value")} />
+        <button type="submit"><i className="fa fa-link"></i></button>
       </form>) // maybe we'll add Skype in the future ...
   }
 });
@@ -291,6 +322,11 @@ var MainContent = React.createClass({
   },
   newEntry: function(accountData){
     var accounts = this.state.accounts;
+    var accountId = accountData["provider"] + ":" + accountData["id"];
+    if ($.map(accounts, function(x) {
+                return x["provider"] + ":" + x["id"];
+              }
+        ).indexOf(accountId) != -1) return; // already in the list
     accounts.push(accountData);
     this.setState({"accounts": accounts});
     this.saveInStorage();
@@ -312,12 +348,14 @@ var MainContent = React.createClass({
               confirmed: this.state.confirmed}
 
       embed = <h2>{this.state.jid}</h2>
-      footer = [<ListItem onConfirmation={this.onJidConfirmation}
-                  preconfirm_first="1"
-                  account={data}
-                  jid={this.state.jid} />,
-                <div>{accounts}</div>,
-                <NewEntry onSubmit={this.newEntry} />]
+      footer = <div className="accounts-wrap">
+                  <ListItem onConfirmation={this.onJidConfirmation}
+                    preconfirm_first="1"
+                    account={data}
+                    jid={this.state.jid} />
+                  <NewEntry onSubmit={this.newEntry} />
+                  <div>{accounts}</div>
+                </div>;
     } else {
       footer = <div className="footnote">* click to edit</div>
     }

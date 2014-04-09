@@ -152,6 +152,56 @@ footer p {
    Author's custom styles
    ========================================================================== */
 
+.accounts-wrap {
+    padding-left: 30%;
+    text-align: left;
+}
+
+.account-wrap {
+    color: #FF9F80;
+}
+
+.account-wrap.confirmed {
+    color: #D1F2A5;
+}
+
+.accounts-wrap .account {
+    width: 35%;
+    display: inline-block;
+}
+
+.accounts-wrap .status {
+    width: 5%;
+    text-align: center;
+    display: inline-block;
+}
+.accounts-wrap .protocol{
+    margin: 0 5px;
+}
+
+.accounts-wrap button {
+    border: none;
+    padding: 2px 5px;
+    background-color: #FFC48C;
+    color: white;
+    font-size: 0.8em;
+}
+
+.accounts-wrap form {
+    color: #ccc;
+}
+
+.accounts-wrap form select {
+    padding: 3px 0;
+}
+
+.accounts-wrap form {
+    margin: 10px
+}
+.accounts-wrap form button {
+    padding: 6px;
+    margin: 3px
+}
 
 
 
