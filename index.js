@@ -23,6 +23,17 @@ Messenger.options = {
 }
 
 
+var Mustache = React.createClass({
+  render: function(){
+    return (<div className="mustache">
+              <div className="background">
+                <img className="backer" src="mustache.svg"/>
+                <span className="expandHelp">{this.props.value}</span>
+              </div>
+            </div>);
+  }
+});
+
 var ListItem = React.createClass({
   mixins: [React.addons.LinkedStateMixin],
   getInitialState: function(){
@@ -222,12 +233,19 @@ var JidForm = React.createClass({
     this.props.newJidCB(this.state["value"])
     return false;
   },
+  triggerUpdate: function(){
+    if (this.props.onUpdate) this.props.onUpdate(this);
+  },
   render: function(){
-    return (<form onSubmit={this.jidSubmit}>
-              <input valueLink={this.linkState('value')}
-                 type="email" id="jid-inpt"
-                 placeholder="type your jabber-id" />
-            </form>);
+    return (<div>
+              <div className="i-wrap">
+                <form onSubmit={this.jidSubmit}>
+                  <input valueLink={this.linkState('value')}
+                    type="email" id="jid-inpt"
+                    placeholder="type your jabber-id" />
+                </form>
+              </div><Mustache value={this.state.value}/>
+            </div>);
   }
 });
 
@@ -285,6 +303,7 @@ var NewEntry = React.createClass({
   }
 });
 
+
 var MainContent = React.createClass({
 
   getInitialState: function() {
@@ -331,14 +350,20 @@ var MainContent = React.createClass({
     this.setState({"accounts": accounts});
     this.saveInStorage();
   },
+  onUpdate: function(){
+    console.log(arguments);
+  },
   render: function() {
-    var embed = <h2 title="Click to change"
-                    className="clickable"
-                    onClick={this.setInteractive}>Mario*</h2>,
+    var embed = [<div className="i-wrap">
+                    <h2 title="Click to change"
+                      className="clickable"
+                      onClick={this.setInteractive}>Mario*</h2>
+                  </div>,
+                  <Mustache value="Mario *" />],
         footer = '';
 
     if (this.state.interactive){
-      embed = <JidForm newJidCB={this.newJid}/>
+      embed = <JidForm newJidCB={this.newJid} onUpdate={this.onUpdate}/>
     } else if (this.state.jid) {
       var accounts = this.state.accounts.map(function(item) {
         return <ListItem account={item} jid={this.state.jid} />
@@ -347,7 +372,10 @@ var MainContent = React.createClass({
               id: this.state.jid,
               confirmed: this.state.confirmed}
 
-      embed = <h2>{this.state.jid}</h2>
+      embed = [<div className="i-wrap">
+                  <h2>{this.state.jid}</h2>
+              </div>,
+              <Mustache value={this.state.jid}/>]
       footer = <div className="accounts-wrap">
                   <ListItem onConfirmation={this.onJidConfirmation}
                     preconfirm_first="1"
@@ -363,14 +391,10 @@ var MainContent = React.createClass({
     return (<div>
               <header>
                 <h1>it`se me</h1>
-                <div className="i-wrap">
-                  {embed}
-                </div>
-                <img src="./mustache.svg" className="mustache" alt="Mario`s mustache" />
-            </header>
-            {footer}
-          </div>
-        );
+                {embed}
+              </header>
+              {footer}
+            </div>);
     }
 });
 
